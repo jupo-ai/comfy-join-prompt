@@ -78,7 +78,7 @@ const extension = {
                         const prefix = this.properties.prefix || "";
                         const suffix = this.properties.suffix || "";
                         
-                        if (stringValue) return prefix + stringValue + suffix;
+                        if (stringValue.trim()) return prefix + stringValue + suffix;
                         else return stringValue;
                     
                     } catch (error) {
