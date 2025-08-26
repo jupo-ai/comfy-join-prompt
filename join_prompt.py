@@ -1,7 +1,5 @@
 from comfy.comfy_types import IO
-from .utils import Field, packageName
-
-category = packageName
+from .utils import Field
 
 class JoinPrompt:
     @classmethod
@@ -16,7 +14,6 @@ class JoinPrompt:
         }
     
     RETURN_TYPES = (IO.STRING, )
-    CATEGORY = category
     FUNCTION = "execute"
     
     def execute(self, text: str, prev_text: str=""):
