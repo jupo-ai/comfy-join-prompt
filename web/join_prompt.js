@@ -1,94 +1,111 @@
 import { app } from "../../scripts/app.js";
-import { api } from "../../scripts/api.js";
-import { $el } from "../../scripts/ui.js";
-import { debug, _name, _endpoint, api_get, api_post } from "./utils.js";
+import { mk_name } from "./utils.js";
 
-/**
- * JoinPrompt 拡張機能
- * PrefixとSuffixプロパティを追加
- */
+const classNames = [mk_name("JoinPrompt")];
+
 const extension = {
-    name: _name("JoinPrompt"),
+    name: mk_name("JoinPrompt"), 
 
-    init: async function(app) {},
-    setup: async function(app) {},
+    beforeRegisterNodeDef: function(nodeType, nodeData, app) {
+        if (!classNames.includes(nodeType.comfyClass)) return;
 
-    beforeRegisterNodeDef: async function(nodeType, nodeData, app) {
-        const isStringNode = nodeType.comfyClass === _name("JoinPrompt");
-        
-        if (isStringNode) {
-            this.enhanceStringNode(nodeType);
-        }
-    },
-
-    /**
-     * 文字列ノードにprefixとsuffixプロパティを追加
-     */
-    enhanceStringNode(nodeType) {
-        const originalOnNodeCreated = nodeType.prototype.onNodeCreated;
-
-        // ==================== ノードライフサイクル ====================
-        
+        // --------------------------------------
+        // onNodeCreated
+        // --------------------------------------
+        const origOnNodeCreated = nodeType.prototype.onNodeCreated;
         nodeType.prototype.onNodeCreated = function() {
-            const result = originalOnNodeCreated?.apply(this, arguments);
-            
-            this.initializeStringProperties();
-            this.overrideSerializeValue();
-            
-            return result;
-        };
+            const res = origOnNodeCreated?.apply(this, arguments);
 
-        // ==================== 初期化処理 ====================
-        
-        nodeType.prototype.initializeStringProperties = function() {
-            this.properties ||= {};
-            this.addStringProperties();
-        };
+            this.hideWidgets();
+            this.initializeProperties();
+            this.updateOptionsValue();
 
-        nodeType.prototype.addStringProperties = function() {
-            // prefix プロパティ
+            return res;
+        }
+
+
+        // --------------------------------------
+        // hideWidgets
+        // --------------------------------------
+        nodeType.prototype.hideWidgets = function() {
+            const hide = (name) => {
+                const widget = this.widgets.find(w => w.name === name);
+                if (widget) {
+                    widget.hidden = true;
+                    widget.computeSize = (width) => [width, 0];
+
+                    const index = this.inputs.findIndex(i => i.name === name);
+                    if (index !== -1) {
+                        this.inputs.splice(index, 1);
+                    }
+                }
+            }
+
+            hide("options");
+        }
+
+
+        // --------------------------------------
+        // initializeProperties
+        // --------------------------------------
+        nodeType.prototype.initializeProperties = function() {
+
+            // prefix
             this.addProperty("prefix", "", "string", {
                 callback: (_, value) => {
-                    this.properties.prefix = value || "";
+                    this.updateOptionsValue("prefix", value);
                 }
             });
 
-            // suffix プロパティ
+            // suffix
             this.addProperty("suffix", "", "string", {
                 callback: (_, value) => {
-                    this.properties.suffix = value || "";
+                    this.updateOptionsValue("suffix", value);
                 }
             });
-        };
 
-        // ==================== serializeValue オーバーライド ====================
-        
-        nodeType.prototype.overrideSerializeValue = function() {
-            const widget = this.widgets.find(w => w.name === "text"); // String入力ウィジェット
-            if (!widget) return;
-            
-            if (widget.serializeValue) {
-                const originalSerializeValue = widget.serializeValue.bind(widget);
-                widget.serializeValue = async () => {
-                    try {
-                        // 元の値を取得（Promiseの場合はawait）
-                        const originalValue = await originalSerializeValue();
-                        const stringValue = String(originalValue || "");
-                        
-                        const prefix = this.properties.prefix || "";
-                        const suffix = this.properties.suffix || "";
-                        
-                        if (stringValue.trim()) return prefix + stringValue + suffix;
-                        else return stringValue;
-                    
-                    } catch (error) {
-                        console.error("serializeValue error:", error);
-                        // エラー時は元の値をそのまま返す
-                        return originalSerializeValue();
-                    }
-                };
+            // separator
+            this.addProperty("separator", "", "string", {
+                callback: (_, value) => {
+                    this.updateOptionsValue("separator", value);
+                }
+            });
+
+            // join_with_newline
+            this.addProperty("join_with_newline", false, "boolean", {
+                callback: (_, value) => {
+                    this.updateOptionsValue("join_with_newline", value);
+                }
+            });
+
+            // cleanup
+            this.addProperty("cleanup", false, "boolean", {
+                callback: (_, value) => {
+                    this.updateOptionsValue("cleanup", value);
+                }
+            });
+        }
+
+
+        // --------------------------------------
+        // updateOptionValue
+        // --------------------------------------
+        nodeType.prototype.updateOptionsValue = function(key, value) {
+            const widget = this.widgets.find(w => w.name === "options");
+            const options = {
+                prefix: this.properties.prefix, 
+                suffix: this.properties.suffix, 
+                separator: this.properties.separator, 
+                join_with_newline: this.properties.join_with_newline, 
+                cleanup: this.properties.cleanup
+            };
+            options[key] = value;
+            if (widget) {
+                widget.value = JSON.stringify(options);
             }
-        };
+        }
+        
+        
     }
 };
 
