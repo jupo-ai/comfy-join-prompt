@@ -1,14 +1,15 @@
-from .py.utils import mk_name, set_default_category
+from typing_extensions import override
+from comfy_api.latest import ComfyExtension
 from .py import join_prompt
 
-NODE_CLASS_MAPPINGS = {
-    mk_name("JoinPrompt"): join_prompt.JoinPrompt, 
-}
+class Extension(ComfyExtension):
+    @override
+    async def get_node_list(self):
+        return [
+            join_prompt.JoinPrompt
+        ]
 
-NODE_DISPLAY_NAME_MAPPINGS = {
-    mk_name("JoinPrompt"): "Join Prompt"
-}
+async def comfy_entrypoint():
+    return Extension()
 
 WEB_DIRECTORY = "./web"
-
-set_default_category(NODE_CLASS_MAPPINGS)

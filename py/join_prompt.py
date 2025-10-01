@@ -1,24 +1,26 @@
-from comfy.comfy_types import IO
-from .utils import Field
+from comfy_api.latest import io
+from .utils import mk_name, category
 import json
 
-class JoinPrompt:
+class JoinPrompt(io.ComfyNode):
     @classmethod
-    def INPUT_TYPES(cls):
-        return {
-            "required": {
-                "text": Field.string(multiline=True), 
-                "options": Field.string(multiline=True)
-            }, 
-            "optional": {
-                "prev_text": Field.string(forceInput=True), 
-            }, 
-        }
+    def define_schema(cls):
+        return io.Schema(
+            node_id=mk_name("JoinPrompt"), 
+            display_name="Join Prompt", 
+            category=category, 
+            inputs=[
+                io.String.Input("text", multiline=True), 
+                io.String.Input("options", multiline=True), 
+                io.String.Input("prev_text", force_input=True, optional=True)
+            ], 
+            outputs=[
+                io.String.Output()
+            ]
+        )
     
-    RETURN_TYPES = (IO.STRING, )
-    FUNCTION = "execute"
-    
-    def execute(self, text: str, prev_text: str="", options: str=""):
+    @classmethod
+    def execute(cls, text: str, prev_text: str="", options: str=""):
         options = json.loads(options)
 
         prefix = options.get("prefix", "")
@@ -30,8 +32,8 @@ class JoinPrompt:
         text = f"{prefix}{text}{suffix}"
 
         if cleanup:
-            text = self.cleanup(text)
-            prev_text = self.cleanup(prev_text)
+            text = cls.cleanup(text)
+            prev_text = cls.cleanup(prev_text)
         
         if not prev_text:
             return (text, )
@@ -48,7 +50,8 @@ class JoinPrompt:
         return (joined, )
 
 
-    def cleanup(self, text: str):
+    @classmethod
+    def cleanup(cls, text: str):
         last_is_commna = text.endswith(",") or text.endswith(", ")
 
         text_list = text.split(",")
