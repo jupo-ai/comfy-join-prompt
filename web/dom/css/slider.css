@@ -1,0 +1,128 @@
+/*
+=================================================
+Slider
+=================================================
+*/
+.jupo-slider-container {
+    /* --- 変数マッピング --- */
+    --sl-font-family:       var(--font-family, "Segoe UI", sans-serif);
+    
+    /* カラー */
+    --sl-label-color:       var(--text-secondary, rgba(255, 255, 255, 0.65));
+    
+    /* トラックの基本色（未選択部分） */
+    --sl-track-bg:          rgba(0, 0, 0, 0.4); 
+    --sl-track-border:      1px solid rgba(255, 255, 255, 0.1);
+    
+    --sl-thumb-color:       var(--text-primary, #ddd);
+    
+    /* 進捗バーの色（アクセントカラー） */
+    --sl-fill-color:        var(--input-border-focus, rgb(78, 164, 255));
+    
+    /* サイズ */
+    --sl-track-height:      6px;
+    --sl-thumb-size:        14px;
+    
+    /* レイアウト */
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    box-sizing: border-box;
+    
+    font-family: var(--sl-font-family);
+}
+
+/* 
+   ------------------------------------------
+   上段: ヘッダー (ラベル + NumberInput)
+   ------------------------------------------
+*/
+.jupo-slider-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}
+
+.jupo-slider-label {
+    font-size: 12px;
+    color: var(--sl-label-color);
+    font-weight: 500;
+    letter-spacing: 0.04rem;
+    
+    user-select: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 
+   ------------------------------------------
+   下段: ボディ (スライダー本体)
+   ------------------------------------------
+*/
+.jupo-slider-body {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 20px; /* 操作エリア全体の高さ */
+}
+
+/* range inputのリセットとスタイル */
+.jupo-slider-range {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    background: transparent; /* JSで背景(グラデーション)を制御するため透明に */
+    margin: 0;
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 99px;
+}
+
+.jupo-slider-range:focus {
+    outline: none;
+}
+
+/* 
+   --- Webkit (Chrome, Safari, Edge) --- 
+*/
+/* トラック (溝) */
+.jupo-slider-range::-webkit-slider-runnable-track {
+    width: 100%;
+    height: var(--sl-track-height);
+
+    border-radius: 99px;
+    cursor: pointer;
+    
+    /* ボーダーがあるとグラデーションと馴染まない場合があるため調整 */
+    background: linear-gradient(to right, var(--sl-fill-color) var(--percent), var(--sl-track-bg) var(--percent));
+}
+
+/* サム (つまみ) */
+.jupo-slider-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: var(--sl-thumb-size);
+    width: var(--sl-thumb-size);
+    border-radius: 50%;
+    background: var(--sl-thumb-color);
+    border: none;
+    
+    /* 中央配置の計算 */
+    margin-top: calc((var(--sl-track-height) / 2) - (var(--sl-thumb-size) / 2) - 1px);
+    
+    box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    transition: transform 0.1s, background-color 0.2s;
+}
+
+/* ホバー/アクティブ時のサム */
+.jupo-slider-range:hover::-webkit-slider-thumb {
+    background: #fff;
+    transform: scale(1.1);
+}
+
+.jupo-slider-range:active::-webkit-slider-thumb {
+    background: var(--sl-fill-color); /* アクティブ時はアクセントカラーに */
+    transform: scale(1.2);
+}
+

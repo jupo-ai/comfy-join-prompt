@@ -1,0 +1,47 @@
+/*
+=================================================
+Base Dialog Variables
+=================================================
+*/
+.jupo-dialog {
+    /* --- Base Background --- */
+    --dialog-bg:                    rgb(26, 32, 43);
+    --dialog-bg-secondary:          rgb(45, 55, 71);
+    --dialog-border:                rgba(255, 255, 255, 0.1);
+    --dialog-hover:                 rgba(255, 255, 255, 0.2);
+
+    /* --- Accent Colors --- */
+    --accent-color:                 rgb(4, 124, 204);
+    --accent-hover:                 rgb(73, 174, 241);
+    --accent-secondary:             rgb(89, 202, 132);
+    --accent-secondary-hover:       rgb(138, 241, 178);
+    --accent-error:                 rgb(190, 81, 81);
+    --accent-error-hover:           rgb(231, 131, 131);
+
+    /* --- Text Colors --- */
+    --text-primary:                 rgba(255, 255, 255, 0.85);
+    --text-secondary:               rgba(255, 255, 255, 0.65);
+    --text-tertiary:                rgba(255, 255, 255, 0.45);
+
+    /* --- Input Colors --- */
+    --input-bg:                     rgba(0, 0, 0, 0.35);
+    --input-bg-focus:               rgba(78, 164, 255, 0.1);
+    --input-border:                 rgba(255, 255, 255, 0.1);
+    --input-border-focus:           rgb(78, 164, 255);
+
+    /* --- List / Interactive States --- */
+    --list-hover:                   rgba(255, 255, 255, 0.15);
+    --list-active:                  rgba(4, 124, 204, 0.35);
+
+    /* --- Layout Tokens --- */
+    --radius-window:                8px;
+    --toolbar-height:               36px;
+
+    /* --- Scrollbar --- */
+    --scrollbar-width:              12px;
+    --scrollbar-thumb:              rgba(255, 255, 255, 0.4);
+    --scrollbar-thumb-hover:        rgba(255, 255, 255, 0.6);
+
+    /* --- Other --- */
+    --font-family:                  "Segoe UI", sans-serif;
+}

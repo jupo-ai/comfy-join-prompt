@@ -1,0 +1,144 @@
+/*
+=================================================
+Icon Common Variables & Base
+=================================================
+*/
+:root {
+    --icon-color:           rgb(255 255 255 / 0.65); /* 通常時 */
+    --icon-color-hover:     rgb(255 255 255 / 0.85); /* ホバー */
+
+    --icon-color-enabled:       rgb(89, 202, 132);     /* トグル有効 */
+    --icon-color-enabled-hover: rgb(138, 241, 178);    /* トグル有効ホバー */
+    
+    --icon-bg-hover:    rgb(255 255 255 / 0.1);   /* ホバー(背景) */
+    --icon-bg-active:   rgb(255 255 255 / 0.15);  /* クリック(背景) */
+}
+
+/* 単体アイコン */
+.jupo-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: inherit;
+    line-height: 1;
+    color: inherit;
+    pointer-events: none; /* ボタンクリックの邪魔をしないため */
+}
+
+/*
+=================================================
+Icon Button
+=================================================
+*/
+.jupo-icon-button {
+    /* デフォルトサイズ（JSから上書き可能） */
+    --icon-size: 16px;
+    --button-padding: 4px;
+    
+    /* ボタン全体のサイズ計算: アイコン + パディング */
+    --button-size: calc(var(--icon-size) + (var(--button-padding) * 2));
+}
+
+.jupo-icon-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    
+    width: var(--button-size);
+    height: var(--button-size);
+    padding: 0;
+    margin: 0;
+    
+    background: transparent;
+    border: none;
+    border-radius: 5px;
+    
+    /* 文字色 */
+    color: var(--icon-color);
+    font-size: var(--icon-size);
+    
+    cursor: pointer;
+    transition: background-color 0.1s, color 0.1s;
+}
+
+/* ホバー時: アイコンを白くし、背景を薄く表示 */
+.jupo-icon-button:hover {
+    color: var(--icon-color-hover);
+    background-color: var(--icon-bg-hover);
+}
+
+/* クリック時 */
+.jupo-icon-button:active {
+    background-color: var(--icon-bg-active);
+}
+
+/* 無効化 */
+.jupo-icon-button:disabled {
+    cursor: not-allowed;
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+
+/*
+=================================================
+Icon Toggle
+=================================================
+*/
+.jupo-icon-toggle {
+    /* Buttonと共有の変数 */
+    --icon-size: 16px;
+    --button-padding: 4px;
+    --button-size: calc(var(--icon-size) + (var(--button-padding) * 2));
+}
+
+.jupo-icon-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    
+    width: var(--button-size);
+    height: var(--button-size);
+    padding: 0;
+    margin: 0;
+    
+    background: transparent;
+    border: none;
+    border-radius: 5px;
+    
+    /* 文字色 */
+    color: var(--icon-color);
+    font-size: var(--icon-size);
+    
+    cursor: pointer;
+    transition: background-color 0.1s, color 0.1s;
+}
+
+/* ホバー時: アイコンを白くし、背景を薄く表示 */
+.jupo-icon-toggle:hover {
+    color: var(--icon-color-hover);
+    background-color: var(--icon-bg-hover);
+}
+
+/* クリック時 */
+.jupo-icon-toggle:active {
+    background-color: var(--icon-bg-active);
+}
+
+/* --- ON状態 --- */
+.jupo-icon-toggle--enabled {
+    color: var(--icon-color-enabled);
+}
+
+/* ON状態でのホバー */
+.jupo-icon-toggle--enabled:hover {
+    color: var(--icon-color-enabled-hover);
+    background-color: var(--icon-bg-hover);
+}
+
+/* --- Disabled --- */
+.jupo-icon-toggle:disabled {
+    cursor: not-allowed;
+    pointer-events: none;
+    opacity: 0.5;
+}

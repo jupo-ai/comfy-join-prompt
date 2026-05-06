@@ -1,0 +1,33 @@
+/*
+=================================================
+Input
+=================================================
+*/
+.jupo-input {
+    --ip-input-bg: var(--input-bg, rgba(0, 0, 0, 0.35));
+    --ip-input-bg-focus: var(--input-bg-focus, rgba(78, 164, 255, 0.1));
+
+    --ip-input-border: var(--input-border, rgba(255, 255, 255, 0.1));
+    --ip-input-border-focus: var(--input-border-focus, rgb(78, 164, 255));
+
+    --ip-text-color: var(--text-primary, rgba(255, 255, 255, 0.85));
+}
+
+.jupo-input {
+    box-sizing: border-box;
+    padding: 10px 12px;
+
+    background-color: var(--ip-input-bg);
+    border: 1px solid var(--ip-input-border);
+    border-radius: 2px;
+    outline: none;
+
+    color: var(--ip-text-color);
+    font-size: 14px;
+    letter-spacing: 0.02rem;
+}
+
+.jupo-input:focus {
+    background-color: var(--ip-input-bg-focus);
+    border-color: var(--ip-input-border-focus);
+}

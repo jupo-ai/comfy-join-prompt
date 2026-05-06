@@ -1,0 +1,181 @@
+/*
+=================================================
+Selector Widget
+=================================================
+*/
+
+/* --- 共通変数の定義 --- */
+/*
+以下の変数は selector-field から引き継ぎ
+    --gap-in-widget
+    --padding-in-widget
+*/
+.jupo-selector-widget {
+    /* --- カラーパレット --- */
+    --widget-bg: rgb(32, 36, 45);
+    --widget-bg-hover: rgb(40, 45, 55);
+
+    --widget-border: rgba(255, 255, 255, 0.1);
+    --widget-border-hover: rgba(255, 255, 255, 0.2);
+
+    --text-primary:     rgb(255 255 255 / 0.85);
+    --text-secondary:   rgb(255 255 255 / 0.65);
+
+    --accent-color: rgb(100, 181, 246);
+    --danger-color: rgb(239, 83, 80); /* 削除ボタン等の警告色 */
+
+    /* ドラッグ中の色 */
+    --dragging-bg: rgb(26, 32, 43);
+    --dragging-border: rgba(4, 124, 204);
+    
+    /* --- サイズ・設定 --- */
+    --widget-height: 32px;
+    --border-radius: 6px;
+    --font-size: 12px;
+    --transition-duration: 0.1s;
+}
+
+/* --- ウィジェット本体 --- */
+.jupo-selector-widget {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    width: 100%;
+    height: var(--widget-height);
+    padding: var(--padding-in-widget);
+    gap: var(--gap-in-widget);
+
+    background-color: var(--widget-bg);
+    border: 1px solid var(--widget-border);
+    border-radius: var(--border-radius);
+
+    color: var(--text-primary);
+    font-size: var(--font-size);
+
+    transition: all var(--transition-duration);
+    user-select: none;
+    box-sizing: border-box;
+}
+
+/* ドラッグ中のウィジェットのスタイル */
+.jupo-selector-widget--dragging {
+    opacity: 0.5;
+    background-color: var(--dragging-bg);
+    border-color: var(--dragging-border);
+    z-index: 100;
+    transform: scale(1.02);
+}
+
+/* --- ドラッグハンドル --- */
+.jupo-selector-widget-drag-handle {
+    order: -1;
+    color: var(--text-secondary);
+    pointer-events: auto;
+    opacity: 0.5;
+}
+.jupo-selector-widget-drag-handle:hover {
+    cursor: grab;
+    opacity: 1;
+}
+
+
+/* --- アイコンコンテナ --- */
+.jupo-selector-widget-icon-container {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    gap: 0;
+    align-items: center;
+    color: var(--text-secondary);
+}
+
+
+/* --- 表示名 --- */
+.jupo-selector-widget-display-name {
+    flex: 1;
+    color: var(--text-primary);
+
+    display: flex;
+    align-items: center;
+    min-width: 0px;
+    height: 100%;
+
+    transition: color var(--transition-duration);
+    cursor: pointer;
+}
+
+.jupo-selector-widget-display-name > span {
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+    padding-bottom: 2px;
+}
+
+.jupo-selector-widget-display-name:hover {
+    color: #ffffff;
+}
+
+/* --- 削除ボタン --- */
+.jupo-selector-widget-delete {
+    order: 1;
+}
+
+.jupo-selector-widget-delete:hover {
+    color: var(--danger-color);
+    background-color: rgba(239, 83, 80, 0.15);
+}
+
+
+/* --- 無効時 --- */
+.jupo-selector-widget.jupo-selector-widget--disabled {
+    opacity: 0.5;
+    background-color: transparent;
+    border-style: dashed;
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.jupo-selector-widget.jupo-selector-widget--disabled:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.jupo-selector-widget.jupo-selector-widget--disabled .jupo-selector-widget-display-name {
+    color: var(--text-secondary);
+    text-decoration: line-through;
+}
+
+
+/* --- セパレータ --- */
+.jupo-selector-widget--separator {
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 0;
+
+    height: 28px;
+    margin: 4px 0;
+
+    justify-content: center;
+}
+
+.jupo-selector-widget--separator:hover {
+    background-color: transparent;
+}
+
+.jupo-selector-widget--separator .jupo-selector-widget-display-name {
+    font-size: 11px;
+    color: var(--text-secondary);
+    font-style: normal;
+    font-weight: 600;
+
+    justify-content: center;
+    padding: 0 10px;
+    background: transparent;
+    flex: 1;
+    cursor: pointer;
+}

@@ -1,0 +1,168 @@
+/*
+=================================================
+Number Input
+=================================================
+*/
+.jupo-number-input {
+    /* 
+     * --- 変数マッピング (Bridge) ---
+     */
+    
+    /* フォント・サイズ */
+    --ni-font-family:       var(--font-family, "Segoe UI", sans-serif);
+    --ni-radius:            4px; /* ボックス型にするため少し小さめの角丸 */
+    
+    /* カラーパレット (BaseDialog変数へ接続) */
+    --ni-bg:                var(--input-bg, rgba(0, 0, 0, 0.35));
+    --ni-border:            1px solid var(--input-border, rgba(255, 255, 255, 0.1));
+    
+    /* アクティブ / フォーカス / ドラッグ時 */
+    --ni-bg-active:         var(--input-bg-focus, rgba(78, 164, 255, 0.1));
+    --ni-border-active:     1px solid var(--input-border-focus, rgb(78, 164, 255));
+    --ni-accent-color:      var(--input-border-focus, rgb(78, 164, 255));
+    
+    /* テキスト */
+    --ni-text:              var(--text-primary, rgba(255, 255, 255, 0.85));
+    --ni-text-hover:        var(--text-primary, #fff);
+    
+    /* ボタン */
+    --ni-btn-hover-bg:      rgba(255, 255, 255, 0.1);
+    --ni-btn-active-bg:     rgba(255, 255, 255, 0.2);
+    --ni-icon-opacity:      0.6; /* アイコンの薄さ */
+
+    /* サイズ設定 (デフォルト値) */
+    /* JSのプロパティ(width/height)で上書きされる前提ですが、CSS側でのベース定義 */
+    --ni-default-width:     100px;
+    --ni-default-height:    30px;
+    --ni-default-font-size: 13px;
+
+    /* --- 本体スタイル --- */
+    display: inline-flex;
+    align-items: center;
+    box-sizing: border-box;
+
+    /* JSが --width, --height をセットしてくるが、未設定時のフォールバックも考慮 */
+    width: var(--width, var(--ni-default-width));
+    height: var(--height, var(--ni-default-height));
+
+    background-color: var(--ni-bg);
+    border: var(--ni-border);
+    border-radius: var(--ni-radius);
+    
+    font-family: var(--ni-font-family);
+    color: var(--ni-text);
+    font-size: var(--font-size, var(--ni-default-font-size));
+
+    user-select: none;
+    overflow: hidden;
+    transition: background-color 0.2s, border-color 0.2s;
+    
+    /* レイアウト調整用 */
+    vertical-align: middle;
+}
+
+/* ホバー時 */
+.jupo-number-input:hover {
+    border-color: rgba(255, 255, 255, 0.3);
+    background-color: var(--ni-bg-active);
+}
+
+/* ドラッグ中 (JSが付与するクラス) */
+.jupo-number-input.is-number-dragging {
+    border: var(--ni-border-active);
+    background-color: var(--ni-bg-active);
+    cursor: ew-resize;
+}
+
+/* 
+   --- ボタン (左右) --- 
+   JSで "<", ">" というテキストが入っていますが、
+   これを透明にしてSVG背景画像を表示します。
+*/
+.jupo-number-input-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    height: 100%;
+    width: 16px;
+    flex-shrink: 0;
+    
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    
+    position: relative;
+    transition: background-color 0.1s;
+}
+
+/* アイコン共通設定 (疑似要素でSVGを表示) */
+.jupo-number-input-button::after {
+    content: '';
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    opacity: var(--ni-icon-opacity);
+    transition: opacity 0.2s;
+    
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
+/* 左ボタン (<) -> マイナスアイコン */
+.jupo-number-input-button:first-child::after {
+    /* SVG: Minus */
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cline x1='5' y1='12' x2='19' y2='12'%3e%3c/line%3e%3c/svg%3e");
+}
+
+/* 右ボタン (>) -> プラスアイコン */
+.jupo-number-input-button:last-child::after {
+    /* SVG: Plus */
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cline x1='12' y1='5' x2='12' y2='19'%3e%3c/line%3e%3cline x1='5' y1='12' x2='19' y2='12'%3e%3c/line%3e%3c/svg%3e");
+}
+
+/* ボタンホバー */
+.jupo-number-input:not(.is-number-dragging) 
+.jupo-number-input-button:hover {
+    background-color: var(--ni-btn-hover-bg);
+}
+
+.jupo-number-input:not(.is-number-dragging) 
+.jupo-number-input-button:hover::after {
+    opacity: 1; /* ホバー時は濃く */
+}
+
+/* ボタンアクティブ */
+.jupo-number-input-button:active {
+    background-color: var(--ni-btn-active-bg);
+}
+
+/* 
+   --- 数値表示エリア (中央) --- 
+*/
+.jupo-number-input-value {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    height: 100%;
+    min-width: 0;
+    padding: 0 4px 2px 4px;
+    
+    /* 数値はちゃんと表示する */
+    color: var(--ni-text);
+    line-height: 1;
+    
+    cursor: ew-resize; 
+    z-index: 1;
+}
+
+/* ドラッグ中は数値をアクセントカラーに */
+.jupo-number-input.is-number-dragging 
+.jupo-number-input-value {
+    color: var(--ni-accent-color);
+    font-weight: 600;
+}

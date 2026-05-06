@@ -1,0 +1,260 @@
+/*
+=================================================
+Dropdown
+=================================================
+*/
+
+.jupo-dropdown-container {
+    /* 
+     * --- 変数マッピング (Bridge) ---
+     */
+
+    /* フォント・サイズ */
+    --dd-font-family:       var(--font-family, "Segoe UI", sans-serif);
+    --dd-radius:            4px; /* 入力欄としての角丸（ダイアログのradiusより少し小さめを想定） */
+    
+    /* ベースカラー (Inputスタイルに合わせる) */
+    --dd-bg:                var(--input-bg, rgba(0, 0, 0, 0.35));
+    --dd-border:            1px solid var(--input-border, rgba(255, 255, 255, 0.1));
+    
+    /* フォーカス・アクティブ時 */
+    --dd-bg-active:         var(--input-bg-focus, rgba(78, 164, 255, 0.1));
+    --dd-border-active:     1px solid var(--input-border-focus, rgb(78, 164, 255));
+    --dd-accent-color:      var(--input-border-focus, rgb(78, 164, 255)); /* アクセント */
+
+    /* テキストカラー */
+    --dd-text-main:         var(--text-primary, rgba(255, 255, 255, 0.85));
+    --dd-text-placeholder:  var(--text-secondary, rgba(255, 255, 255, 0.65));
+    --dd-text-disabled:     var(--text-tertiary, rgba(255, 255, 255, 0.45));
+
+    /* ドロップダウンリスト (Popup) */
+    --dd-list-bg:           var(--dialog-bg-secondary, rgb(45, 55, 71)); /* 背景より一段明るい色 */
+    --dd-list-shadow:       0 8px 16px rgba(0, 0, 0, 0.4);
+    
+    /* リストアイテムのインタラクション */
+    --dd-item-hover:        var(--list-hover, rgba(255, 255, 255, 0.15));
+    --dd-item-selected-bg:  var(--list-active, rgba(4, 124, 204, 0.35));
+    --dd-item-selected-text:var(--text-primary, #fff);
+
+    /* グループ見出し */
+    --dd-group-bg:          rgba(0, 0, 0, 0.2);
+    --dd-group-text:        var(--text-tertiary, rgba(255, 255, 255, 0.45));
+
+    /* アニメーション設定 */
+    --dd-transition:        0.2s ease;
+    --dd-anim-popup:        cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+
+    /* --- スタイル定義 --- */
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    
+    box-sizing: border-box;
+    font-family: var(--dd-font-family);
+    font-size: 14px; /* ベースサイズ */
+    text-align: left;
+    cursor: pointer;
+    z-index: 10;
+
+    /* 入力フォームとしての見た目 */
+    background-color: var(--dd-bg);
+    border: var(--dd-border);
+    border-radius: var(--dd-radius);
+    padding: 0; /* 内部要素でpadding調整 */
+    
+    transition: background-color var(--dd-transition), border-color var(--dd-transition);
+}
+
+/* ホバー時 */
+.jupo-dropdown-container:hover {
+    background-color: var(--dd-bg-active);
+    border-color: rgba(255,255,255,0.3);
+}
+
+/* アクティブ（展開中） */
+.jupo-dropdown-container.active {
+    background-color: var(--dd-bg-active);
+    border: var(--dd-border-active);
+    /* 下側の角丸を消してリストと一体化させるスタイルにする場合もありますが、
+       今回はフロートするリストを採用するため角丸は維持します */
+}
+
+/* 
+   ------------------------------------------
+   表示エリア (Placeholder)
+   ------------------------------------------
+*/
+.jupo-dropdown-placeholder {
+    display: flex;
+    align-items: center;
+    height: 36px;
+    padding: 0 32px 0 12px; /* 右はアイコン分空ける */
+    
+    color: var(--dd-text-placeholder);
+    font-weight: 400;
+    user-select: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 値が選択されている場合 */
+.jupo-dropdown-container.has-value .jupo-dropdown-placeholder {
+    color: var(--dd-text-main);
+}
+
+/* 
+   ------------------------------------------
+   矢印アイコン (SVG)
+   ------------------------------------------
+   ※背景が暗いため、Strokeを白系(rgba(255,255,255,0.6))に変更しています
+*/
+.jupo-dropdown-container::after {
+    content: '';
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    pointer-events: none;
+    
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='rgba(255, 255, 255, 0.6)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-size: contain;
+    transition: transform var(--dd-transition);
+    opacity: 0.7;
+}
+
+.jupo-dropdown-container:hover::after {
+    opacity: 1;
+}
+
+.jupo-dropdown-container.active::after {
+    transform: translateY(-50%) rotateX(180deg);
+    /* アクティブ時はアクセントカラーにする例 */
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='rgb(78, 164, 255)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+}
+
+/* 
+   ------------------------------------------
+   ドロップダウンリスト (Popup)
+   ------------------------------------------
+*/
+.jupo-dropdown-list {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    width: 100%;
+    
+    background-color: var(--dd-list-bg);
+    border: 1px solid var(--input-border); /* 薄いボーダー */
+    border-radius: 4px;
+    box-shadow: var(--dd-list-shadow);
+    
+    display: none;
+    list-style: none;
+    box-sizing: border-box;
+    max-height: 250px;
+    overflow-y: auto;
+    z-index: 100;
+}
+
+/* スクロールバーのカスタマイズ (Webkit) */
+.jupo-dropdown-list::-webkit-scrollbar {
+    width: 8px; /* 少し細く */
+}
+.jupo-dropdown-list::-webkit-scrollbar-thumb {
+    background-color: rgba(255,255,255,0.2);
+    border-radius: 4px;
+}
+.jupo-dropdown-list::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255,255,255,0.4);
+}
+
+.jupo-dropdown-container.active .jupo-dropdown-list {
+    display: block;
+    animation: ddFadeInUp 0.25s var(--dd-anim-popup) forwards;
+}
+
+/* 
+   ------------------------------------------
+   リストアイテム
+   ------------------------------------------
+*/
+.jupo-dropdown-item {
+    position: relative;
+    padding: 10px 16px;
+    font-size: 14px;
+    color: var(--dd-text-main);
+    cursor: pointer;
+    transition: background-color 0.1s;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.jupo-dropdown-item:hover {
+    background-color: var(--dd-item-hover);
+}
+
+/* 選択済み */
+.jupo-dropdown-item.selected {
+    background-color: var(--dd-item-selected-bg);
+    color: var(--dd-item-selected-text);
+    font-weight: 500;
+}
+
+/* チェックマーク */
+.jupo-dropdown-item.selected::after {
+    content: '';
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    margin-left: 10px;
+    /* 白のチェックマーク */
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='20 6 9 17 4 12'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+/* 
+   ------------------------------------------
+   オプショングループ (カテゴリ)
+   ------------------------------------------
+*/
+.jupo-dropdown-group-label {
+    padding: 8px 12px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    
+    color: var(--dd-group-text);
+    background-color: var(--dd-group-bg);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    
+    pointer-events: none;
+}
+
+/* ネストインデント */
+.jupo-dropdown-item.nested {
+    padding-left: 28px;
+}
+
+/* 
+   ------------------------------------------
+   Animation
+   ------------------------------------------
+*/
+@keyframes ddFadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

@@ -1,0 +1,88 @@
+/*
+=================================================
+Toggle Switch
+=================================================
+*/
+.jupo-toggle {
+    --width: 48px;
+    --height: 26px;
+
+    /* --- slider --- */
+    --slider-color-off:             rgb(69, 69, 69);
+    --slider-color-on:              rgb(89, 202, 132);
+    --slider-color-indeterminate:   rgb(128, 128, 128);
+    --slider-border:                rgba(255, 255, 255, 0.2);
+
+    /* --- knob --- */
+    --knob-color:                   rgb(255, 255, 255);
+    --knob-size:                      calc(var(--height) - 4px);
+    --knob-translate-x:               calc(var(--width) - var(--height));
+    
+    /* --- transition --- */
+    --transition-duration:            0.1s;
+}
+
+.jupo-toggle {
+    position: relative;
+    display: inline-block;
+    width: var(--width);
+    height: var(--height);
+    flex-shrink: 0;
+}
+
+.jupo-toggle-input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.jupo-toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: var(--slider-color-off);
+    transition: background-color var(--transition-duration);
+    border-radius: var(--height);
+    border: 1px solid var(--slider-border);
+    box-sizing: border-box;
+}
+
+.jupo-toggle-slider::before {
+    position: absolute;
+    content: "";
+    width: var(--knob-size);
+    height: var(--knob-size);
+    left: 1px;
+    bottom: 1px;
+    background-color: var(--knob-color);
+    transition: transform var(--transition-duration);
+    border-radius: 50%;
+}
+
+.jupo-toggle-input:checked + .jupo-toggle-slider {
+    background-color: var(--slider-color-on);
+}
+
+.jupo-toggle-input:checked + .jupo-toggle-slider::before {
+    transform: translateX(var(--knob-translate-x));
+}
+
+.jupo-toggle-input:indeterminate + .jupo-toggle-slider {
+    background-color: var(--slider-color-indeterminate);
+}
+
+.jupo-toggle-input:indeterminate + .jupo-toggle-slider::before {
+    transform: translateX(calc(var(--knob-translate-x) / 2));
+}
+
+.jupo-toggle.jupo-toggle--disabled {
+    cursor: not-allowed;
+}
+
+.jupo-toggle.jupo-toggle--disabled .jupo-toggle-slider {
+    cursor: not-allowed;
+}
+

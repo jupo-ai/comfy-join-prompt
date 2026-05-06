@@ -1,0 +1,108 @@
+/*
+=================================================
+Confirm Dialog (Implementation)
+=================================================
+*/
+/* --- ウィンドウの大きさ --- */
+.jupo-confirm-dialog {
+    min-width: 400px;
+    margin-top: -30vh; /* 少し上にずらす */
+}
+
+/* --- コンテンツ領域のレイアウト --- */
+.jupo-confirm-dialog-content {
+    padding: 0 20px 20px 20px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* --- タイトル --- */
+.jupo-confirm-dialog-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+/* --- メッセージ --- */
+.jupo-confirm-dialog-message {
+    font-size: 14px;
+    color: var(--text-secondary);
+    padding-left: 8px;
+}
+
+.jupo-confirm-dialog-message > p {
+    margin: 0;
+    padding: 0;
+}
+
+/* --- 入力欄 --- */
+.jupo-confirm-dialog-input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 12px;
+    
+    background-color: var(--input-bg);
+    border: 1px solid var(--input-border);
+    border-radius: 2px;
+    outline: none;
+    
+    color: var(--text-primary);
+    font-size: 14px;
+    letter-spacing: 0.02rem;
+}
+
+.jupo-confirm-dialog-input:focus {
+    background-color: var(--input-bg-focus);
+    border-color: var(--input-border-focus);
+}
+
+.jupo-confirm-dialog-textarea {
+    min-height: 160px;
+    resize: vertical;
+    line-height: 1.45;
+    font-family: inherit;
+    white-space: pre-wrap;
+}
+
+/* --- フッター --- */
+.jupo-confirm-dialog-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+/* --- ボタン --- */
+.jupo-confirm-dialog-button {
+    min-width: 70px;
+    padding: 6px 12px;
+    
+    background-color: var(--accent-color);
+    color: var(--text-primary);
+    
+    border: 1px solid transparent;
+    border-radius: 2px;
+    
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.jupo-confirm-dialog-button:hover {
+    background-color: var(--accent-hover);
+}
+
+.jupo-confirm-dialog-button:active {
+    transform: translateY(1px);
+}
+
+/* キャンセルボタン */
+.jupo-confirm-dialog-button.secondary {
+    background-color: transparent;
+    border: 1px solid var(--dialog-border);
+    color: var(--text-primary);
+}
+.jupo-confirm-dialog-button.secondary:hover {
+    background-color: var(--dialog-hover);
+}

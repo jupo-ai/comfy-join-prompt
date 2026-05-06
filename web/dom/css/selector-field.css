@@ -1,0 +1,153 @@
+/*
+=================================================
+Selector Feild
+=================================================
+*/
+
+/* --- 共通変数の定義 --- */
+.jupo-selector-field {
+    /* --- Default --- */
+    --bg-default:       rgb(45, 55, 71);
+    --border-default:   rgb(69 69 69);
+
+    /* --- Secondary Backgrounds --- */
+    --bg-dark:          rgb(24 24 24);
+    --bg-bright:        rgb(37 37 37);
+
+    /* --- Accent Color --- */
+    --accent-color:     rgb(0 122 204);
+    --accent-hover:     rgb(56 154 219);
+    --accent-secondary: rgb(89, 202, 132);
+    --accent-secondary-hover: rgb(138, 241, 178);
+
+    /* --- Text Color --- */
+    --text-primary:     rgb(255 255 255 / 0.85);
+    --text-secondary:   rgb(255 255 255 / 0.65);
+
+    /* --- Other --- */
+    --font-famiry: "Segoe UI", system-ui, sans-serif;
+    --gap-in-widget: 8px;
+    --padding-in-widget: 4px 8px;
+
+    --header-height: 28px;
+    --header-area-bg: rgb(255 255 255 / 0.05);
+
+    --footer-button-padding: 6px 12px;
+}
+
+.jupo-selector-field {
+    display: block;
+    user-select: none;
+
+    font-family: var(--font-famiry);
+    color: var(--text-primary);
+}
+
+/* --- ウィジェットコンテナ --- */
+.jupo-selector-field-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+/* --- ドラッグ中 --- */
+body.jupo-body-grabbing {
+    cursor: grabbing;
+}
+
+body.jupo-body-grabbing .jupo-selector-field * {
+    pointer-events: none;
+}
+
+
+/*
+=================================================
+Selector Header
+=================================================
+*/
+.jupo-selector-header {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+
+    height: var(--header-height);
+    width: 100%;
+    
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--gap-in-widget);
+
+    padding: var(--padding-in-widget);
+}
+
+/* --- 自由幅エリア --- */
+.jupo-selector-header-flexarea {
+    height: 100%;
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
+/* --- 固定幅エリア ラベル付き --- */
+.jupo-selector-header-fixarea--named {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-secondary);
+
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* --- 固定幅エリア ラベル無し --- */
+.jupo-selector-header-fixarea--empty {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/*
+=================================================
+Selector Footer
+=================================================
+*/
+.jupo-selector-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-top: 10px;
+}
+
+.jupo-selector-footer-button {
+    width: 50%;
+    padding: var(--footer-button-padding);
+
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.08rem;
+    color: var(--text-primary);
+
+    background-color: var(--accent-color);
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background-color 0.1s;
+}
+
+.jupo-selector-footer-button:hover {
+    background-color: var(--accent-hover);
+}
+
+.jupo-selector-footer-button:active {
+    transform: translateY(1px);
+}

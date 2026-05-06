@@ -1,0 +1,140 @@
+/*
+=================================================
+Base Dialog
+=================================================
+*/
+/* --- オーバーレイ（背景の暗幕） --- */
+.jupo-dialog-overlay {
+    position: fixed;
+    inset: 0;
+    box-sizing: border-box;
+
+    background-color: rgb(3 5 10 / 0.5);
+    backdrop-filter: blur(6px);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    opacity: 1;
+    animation: dialog-overlay-fade-in 0.2s ease-out forwards;
+}
+
+/* --- ダイアログ本体（ウィンドウ枠） --- */
+.jupo-dialog {
+    display: flex;
+    flex-direction: column;
+
+    background-color: var(--dialog-bg);
+    
+    border: 1px solid var(--dialog-border);
+    border-radius: var(--radius-window);
+    
+    overflow: hidden;
+    user-select: none;
+
+    color: var(--text-primary);
+    font-family: var(--font-family);
+    font-size: 1rem;
+
+    animation: dialog-fade-in 0.2s ease-out forwards;
+}
+
+/* --- ツールバー（閉じるボタン等） --- */
+.jupo-dialog-toolbar {
+    height: var(--toolbar-height);
+    padding: 8px 12px;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    box-sizing: border-box;
+    gap: 6px;
+    z-index: 10;
+}
+
+/* IconButtonの汎用スタイル補正（BaseDialog内にある場合） */
+.jupo-dialog-toolbar button {
+    color: var(--text-secondary);
+    border-radius: 6px;
+    padding: 6px;
+    border: 1px solid transparent;
+    background: transparent;
+}
+.jupo-dialog-toolbar button:hover {
+    background-color: rgb(255 255 255 / 0.08);
+    border-color: rgb(255 255 255 / 0.15);
+    color: var(--text-primary);
+}
+.jupo-dialog-toolbar button:active {
+    transform: translateY(1px);
+    border-color: var(--accent-color);
+}
+
+
+/* --- コンテンツ領域（抽象コンテナ） --- */
+.jupo-dialog-content {
+    flex: 1;
+    min-height: 0;
+    z-index: 1;
+}
+
+
+/* --- スクロールバー --- */
+.jupo-dialog::-webkit-scrollbar, 
+.jupo-dialog *::-webkit-scrollbar {
+    width: var(--scrollbar-width);
+    height: var(--scrollbar-width);
+}
+
+.jupo-dialog::-webkit-scrollbar-track, 
+.jupo-dialog *::-webkit-scrollbar-track {
+    background-color: transparent;
+    border-radius: calc(var(--scrollbar-width) / 2);
+}
+
+.jupo-dialog::-webkit-scrollbar-thumb, 
+.jupo-dialog *::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-thumb);
+    border-radius: calc(var(--scrollbar-width) / 2);
+
+    border: 3px solid transparent;
+    background-clip: content-box;
+    min-height: 20px;
+}
+
+.jupo-dialog::-webkit-scrollbar-thumb:hover, 
+.jupo-dialog *::-webkit-scrollbar-thumb:hover {
+    background-color: var(--scrollbar-thumb-hover);
+}
+
+.jupo-dialog::-webkit-scrollbar-thumb:active, 
+.jupo-dialog *::-webkit-scrollbar-thumb:active {
+    border-width: 2px;
+}
+
+
+/* --- アニメーションの定義 (Keyframes) --- */
+
+/* オーバーレイ用: 透明から不透明へ */
+@keyframes dialog-overlay-fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* ダイアログ本体用: 下位置から定位置へ */
+@keyframes dialog-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
