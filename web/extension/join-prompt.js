@@ -6,6 +6,11 @@ const PACKAGE_NAME = "JoinPrompt";
 const CLASS_NAMES = [
     mkName(PACKAGE_NAME, "JoinPrompt"), 
 ];
+const COMMAND_OPEN_CONFIG = mkName(PACKAGE_NAME, "OpenConfigDialog");
+
+function isJoinPromptNode(node) {
+    return CLASS_NAMES.includes(node?.comfyClass) || CLASS_NAMES.includes(node?.type);
+}
 
 function nodePositionToClientPosition(node) {
     const canvas = app.canvas;
@@ -30,6 +35,19 @@ function nodePositionToClientPosition(node) {
 
 const extension = {
     name: mkName(PACKAGE_NAME, "JoinPrompt"), 
+    commands: [
+        {
+            id: COMMAND_OPEN_CONFIG,
+            label: "Open JoinPrompt Config",
+            icon: "pi pi-cog",
+            function: (selectedItem) => {
+                const node = isJoinPromptNode(selectedItem)
+                    ? selectedItem
+                    : Array.from(app.canvas?.selectedItems ?? []).find(isJoinPromptNode);
+                node?._openConfigDialog?.();
+            },
+        },
+    ],
 
     beforeRegisterNodeDef: function(nodeType, nodeData, app) {
         if (!CLASS_NAMES.includes(nodeType.comfyClass)) return;
@@ -125,7 +143,7 @@ const extension = {
     getNodeMenuItems(node) {
         const items = [];
 
-        if (!CLASS_NAMES.includes(node.comfyClass)) return items;
+        if (!isJoinPromptNode(node)) return items;
 
         items.push({
             content: "Open Config Dialog", 
@@ -135,6 +153,10 @@ const extension = {
         });
 
         return items;
+    },
+
+    getSelectionToolboxCommands(selectedItem) {
+        return isJoinPromptNode(selectedItem) ? [COMMAND_OPEN_CONFIG] : [];
     }
 };
 
